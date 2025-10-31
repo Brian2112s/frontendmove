@@ -1,38 +1,33 @@
-name: Deploy static site to GitHub Pages
+name: Static Site CI/CD
 
 on:
   push:
-    branches:
-      - main   # verander dit als je hoofdtak anders heet
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 📦 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: 🧱 Build Docker image
+        run: docker build -t static-site .
 
-      - name: Upload site files
+      - name: 🧪 Run container for validation
+        run: |
+          echo "🚀 Starting Docker container for testing..."
+          docker run -d -p 8080:80 --name test-container static-site
+          sleep 5
+          echo "🌐 Testing if index.html is served..."
+          curl -I http://localhost:8080 | grep "200 OK"
+          docker stop test-container
+          echo "✅ Site served successfully!"
+
+      - name: 🗂️ Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./   # map waarin je index.html, css/, js/, images/, etc. staan
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          path: ./   # of ./public/ als je bestanden daarin hebt
