@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;  
+    color: #333;
+}
+
+.header-nav-container {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .logo img {
+    height: 50px;
+}
+
+.nav-links ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #f0a500;
+}
+
+.content {
+    max-width: 1200px;
+    margin: 100px auto 20px auto;
+    padding: 0 20px;
+}
+
+.oefeningendiv, .prestatiesdiv {
+    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.oefeningendiv h2, .prestatiesdiv h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    color: #222;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+.oefeningen {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.oefening, .prestatie {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.oefening:hover, .prestatie:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.oefening img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.oefening p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.oefening p.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    color: #444;
+}
+
+.oefening p.description {
+    font-family: 'Roboto', sans-serif;
+    color: #666;
+}
+
+.prestaties {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.prestatie p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.prestatie p strong {
+    font-weight: bold;
+    color: #333;
+}
+

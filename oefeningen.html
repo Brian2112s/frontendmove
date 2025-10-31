@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/oefeningen.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Oefeningen</title>
+</head>
+<body>
+    <div class="header-nav-container">
+        <header class="header-nav">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="./images/logoproject4.png" alt="Logo" />
+                </div>
+                <div class="nav-links">
+                    <ul id="nav-links">
+                        <li><a href="home.html">Home</a></li>
+                        <li><a href="oefeningen.html">Oefeningen</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li class="hidegebruikers"><a href="gebruikers.html">Gebruikers</a></li>
+                        <li id="login-link"><a href="login_register/login.html">Login</a></li>
+                        <li id="logout-link" style="display: none;"><a href="#" onclick="logout()">Uitloggen</a></li>
+                        <li>
+                            <select id="language-select">
+                                <option value="nl">Nederlands</option>
+                                <option value="en">English</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div class="content">
+        <div class="oefeningendiv">
+            <h2>Oefeningen</h2>
+            <div class="oefeningen" id="oefeningenList"></div>
+        </div>
+
+        <div class="prestatiesdiv" id="prestatiesdiv" style="display: none;">
+            <h2>Prestaties</h2>
+            <div class="prestaties" id="prestatiesList"></div>
+        </div>
+    </div>
+
+    <script>
+        "use strict";
+        
+        const showAdminButtons = () => {
+            const updateBtn = document.getElementById('updateBtn');
+            const deleteBtn = document.getElementById('deleteBtn');
+
+            if (updateBtn) updateBtn.style.display = 'inline';
+            if (deleteBtn) deleteBtn.style.display = 'inline';
+
+            const gebruikersnav = document.getElementsByClassName('hidegebruikers');
+            for (let i = 0; i < gebruikersnav.length; i++) {
+                gebruikersnav[i].className = 'showgebruikers';
+            }
+        };
+
+        const checkUserRole = async () => {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                return;
+            }
+
+            try {
+                const response = await axios.get('http://localhost:8000/api/user', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const userRole = response.data.role;
+
+                if (userRole === 'admin') {
+                    showAdminButtons();
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error fetching user role:', error);
+                return false;
+            }
+        };
+
+        const getExercises = async (lang) => {
+            const apiEndpoint = `http://localhost:8000/api/exercises?lang=${lang}`;
+            const token = localStorage.getItem('access_token');
+
+            try {
+                const response = await axios.get(apiEndpoint, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const exercises = response.data;
+                const oefeningenList = document.getElementById('oefeningenList');
+
+                oefeningenList.innerHTML = ''; // Clear existing content
+
+                const isAdminUser = await checkUserRole(); 
+
+                exercises.forEach(exercise => {
+                    const exerciseItem = document.createElement('div');
+                    exerciseItem.classList.add('oefening');
+                    exerciseItem.innerHTML = `
+                        <img src="${exercise.image}" alt="Oefening afbeelding">
+                        <div class="exercise-details">
+                            <p><strong>Naam oefening:</strong> ${exercise.name}</p>
+                            <p><strong>Beschrijving:</strong> ${exercise.description}</p>
+                            ${isAdminUser ? `
+                                <a href="update_oefening.html?exercise_id=${exercise.id}" class="update-btn">Oefening Bijwerken</a>
+                                <button onclick="deleteExercise('${exercise.id}')" class="delete-btn">Oefening Verwijderen</button>
+                            ` : ''}
+                        </div>
+                    `;
+                    oefeningenList.appendChild(exerciseItem);
+                });
+            } catch (error) {
+                console.error('Fout bij het ophalen van oefeningen:', error);
+            }
+        };
+
+        const getPrestaties = async () => {
+            const apiEndpoint = 'http://localhost:8000/api/achievements';
+            const token = localStorage.getItem('access_token');
+
+            if (!token) return;
+
+            try {
+                const response = await axios.get(apiEndpoint, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const prestaties = response.data;
+                const prestatiesList = document.getElementById('prestatiesList');
+
+                prestatiesList.innerHTML = ''; // Clear existing content
+
+                prestaties.forEach(prestatie => {
+                    const prestatieItem = document.createElement('div');
+                    prestatieItem.classList.add('prestatie');
+                    prestatieItem.innerHTML = `
+                        <p>Naam gebruiker: ${prestatie.user_id}</p>
+                        <p>Datum: ${prestatie.date}</p>
+                        <p>start tijd: ${prestatie.start_time}</p>
+                        <p>Eind tijd: ${prestatie.end_time}</p>
+                        <p>Aantal keer: ${prestatie.end_time}</p>
+                    `;
+                    prestatiesList.appendChild(prestatieItem);
+                });
+            } catch (error) {
+                console.error('Fout bij het ophalen van prestaties:', error);
+            }
+        };
+
+        const logout = () => {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_name');
+            document.getElementById('login-link').style.display = 'inline';
+            document.getElementById('logout-link').style.display = 'none';
+            document.getElementById('prestatiesdiv').style.display = 'none';
+            window.location.reload();
+        };
+
+        const checkLoginStatus = () => {
+            const token = localStorage.getItem('access_token');
+            const userName = localStorage.getItem('user_name');
+
+            if (token) {
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'inline';
+                document.querySelector('h2').textContent = `Welkom, ${userName}`;
+                document.getElementById('prestatiesdiv').style.display = 'block';
+                getPrestaties();
+            } else {
+                document.getElementById('prestatiesdiv').style.display = 'none';
+            }
+        };
+
+        document.getElementById('language-select').addEventListener('change', function () {
+            const selectedLanguage = this.value;
+            localStorage.setItem('selectedLanguage', selectedLanguage);
+            getExercises(selectedLanguage);
+        });
+
+        window.onload = async () => {
+            const selectedLanguage = localStorage.getItem('selectedLanguage') || 'nl';
+            document.getElementById('language-select').value = selectedLanguage;
+            await getExercises(selectedLanguage);
+            checkLoginStatus();
+            await checkUserRole();
+        };
+    </script>
+</body>
+</html>

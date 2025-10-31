@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summamove</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./style/home.css">
+</head>
+
+<body>
+    <div class="header-nav-container">
+        <header class="header-nav">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="./images/logoproject4.png" alt="Logo" />
+                </div>
+                <div class="nav-links">
+                    <ul>
+                        <li><a href="home.html">Home</a></li>
+                        <li><a href="./oefeningen.html">Oefeningen</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li class="hidegebruikers"><a href="gebruikers.html">Gebruikers</a></li>
+                        <li><a href="./login_register/login.html">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+    <div class="video-container">
+        <video class="header-video" autoplay muted>
+            <source src="images/Running Through Hell - Motivational Video.mp4" type="video/mp4">
+        </video>
+        <div class="overlay">
+            <h1 class="titel">SummaMove</h1>
+            <a href="./login_register/login.html"><button class="Summabutton"><span>Login</span></button></a>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <h1></h1>
+                <p>Contacteer ons:</p>
+                <p>Email: info@summamove.com</p>
+                <p>Telefoon: +123456789</p>
+            </div>
+        </div>
+    </footer>
+</body>
+<script>
+    const showUsersbutton = () => {
+        const gebruikersnav = document.getElementsByClassName('hidegebruikers');
+        for (let i = 0; i < gebruikersnav.length; i++) {
+            gebruikersnav[i].className = 'showgebruikers';
+        }
+    };
+
+    const checkUserRole = async () => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            return;
+        }
+
+        try {
+            const response = await axios.get('http://localhost:8000/api/user', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const userRole = response.data.role;
+
+            if (userRole === 'admin') {
+                showUsersbutton();
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error('Error fetching user role:', error);
+            return false;
+        }
+    };
+
+    window.onload = checkUserRole;
+</script>
+
+</html>

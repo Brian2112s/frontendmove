@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/login.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Registreer</title>
+</head>
+<body>
+    <div class="header-nav-container">
+        <header class="header-nav">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="../images/logoproject4.png" alt="Logo" />
+                </div>
+                <div class="nav-links">
+                    <ul id="nav-links">
+                        <li><a href="../home.html">Home</a></li>
+                        <li><a href="../oefeningen.html">Oefeningen</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li id="login-link"><a href="../login_register/login.html">Login</a></li>
+                        <li id="logout-link" style="display: none;"><a href="#" onclick="logout()">Uitloggen</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div class="RegistreerContainer">
+        <h2>Registreer</h2>
+        <label for="naam">Naam:</label><input type="text" id="naam" required/>
+        <label for="email">Email:</label><input type="email" id="email" required/>
+        <label for="password">Wachtwoord:</label><input type="password" id="password" required>
+        <label for="password_confirmation">Bevestig Wachtwoord:</label><input type="password" id="password_confirmation" required>
+        <button onclick="registreer()">Registreer</button>
+        <div id="registerLink"><a href="../login_register/login.html">Ga terug naar inloggen</a></div>
+        <div id="registerFeedback" style="color: black;"></div> 
+    </div>
+    <script>
+        "use strict";
+
+        const registreer = async () => {
+            const api = "http://localhost:8000/api/register";
+            const naam = document.querySelector("#naam").value;
+            const email = document.querySelector("#email").value;
+            const password = document.querySelector("#password").value;
+            const passwordConfirmation = document.querySelector("#password_confirmation").value;
+
+            if (!naam || !email || !password || !passwordConfirmation) {
+                document.querySelector("#registerFeedback").textContent = "Alle velden zijn verplicht.";
+                return;
+            }
+            if (password !== passwordConfirmation) {
+                document.querySelector("#registerFeedback").textContent = "Wachtwoorden komen niet overeen.";
+                return;
+            }
+
+            const jsonstring = {
+                name: naam,
+                email: email,
+                password: password,
+                password_confirmation: passwordConfirmation
+            };
+            console.log("voeg toe: ", jsonstring);
+
+            try {
+                const respons = await axios.post(api, jsonstring, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                });
+
+                if (respons.status === 200 || respons.status === 201) {
+                    document.querySelector("#registerFeedback").style.color = "blue"; // Verander kleur naar blauw
+                    document.querySelector("#registerFeedback").textContent = "Registratie succesvol! U wordt doorgestuurd naar de loginpagina.";
+                    setTimeout(() => {
+                        window.location.href = "../login_register/login.html";  // Redirect to login page na 2 seconden
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error("Er is een fout opgetreden:", error);
+                document.querySelector("#registerFeedback").style.color = "red";
+                document.querySelector("#registerFeedback").textContent = "Registratie mislukt. Probeer het opnieuw.";
+            }
+        };
+
+        const logout = () => {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_name');
+            document.getElementById('login-link').style.display = 'inline';
+            document.getElementById('logout-link').style.display = 'none';
+            window.location.reload();
+        };
+
+        const checkLoginStatus = () => {
+            const token = localStorage.getItem('access_token');
+            const userName = localStorage.getItem('user_name');
+
+            if (token) {
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'inline';
+                document.querySelector('h2').textContent = `Welkom, ${userName}`;
+            }
+        };
+
+        window.onload = () => {
+            checkLoginStatus();
+        };
+    </script>
+</body>
+</html>

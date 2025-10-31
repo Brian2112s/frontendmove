@@ -1,0 +1,169 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+
+.header-nav-container {
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo img {
+  height: 50px;
+}
+
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  text-decoration: none;
+}
+
+
+
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 100px);
+  overflow: hidden;
+}
+
+.header-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.titel {
+  font-size: 60px;
+  color: #e9dcdc;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(10, 10, 10, 0.7);
+}
+
+
+
+.Summabutton {
+  background-color: #080808; 
+  border: none; 
+  color: white; 
+  padding: 15px 32px; 
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px; 
+  margin: 20px; 
+  cursor: pointer; 
+  border-radius: 10px; 
+  transition: background-color 0.3s ease; 
+}
+
+.Summabutton:hover {
+  background-color:  rgb(153, 149, 153);
+}
+
+/* Footer-stijlen */
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px 0;
+}
+
+.footer-container {
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+.footer-content {
+  text-align: center; 
+}
+
+.footer-content p {
+  margin: 10px 0; 
+  font-family: Arial, sans-serif;
+
+}
+.content {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.oefeningendiv, .prestatiesdiv {
+  margin-bottom: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.oefeningendiv h2, .prestatiesdiv h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+}
+
+.oefeningen, .prestaties {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.oefening, .prestatie {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.oefening img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+

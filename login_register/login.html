@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/login.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Login</title>
+</head>
+<body>
+    <div class="header-nav-container">
+        <header class="header-nav">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="../images/logoproject4.png" alt="Logo" />
+                </div>
+                <div class="nav-links">
+                    <ul>
+                        <li><a href="../home.html">Home</a></li>
+                        <li><a href="../oefeningen.html">Oefeningen</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../login_register/login.html" id="login-link">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div class="loginContainer">
+        <div>
+            <h2>Login</h2>
+            <form onsubmit="login(event)">
+                <input type="email" placeholder="Email" id="email" required>
+                <input type="password" placeholder="Wachtwoord" id="wachtwoord" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="loginFeedback"></div>
+            <div id="registerLink">Heb je nog geen account? <a href="../login_register/register.html">Registreer hier</a></div>
+        </div>
+    </div>
+
+    <script>
+        "use strict";
+        const apiBasis = "http://localhost:8000/api/login";
+
+        const login = async (event) => {
+            event.preventDefault();  
+
+            const email = document.querySelector("#email").value;
+            const password = document.querySelector("#wachtwoord").value;
+            const loginData = { email, password };
+
+            try {
+                const response = await axios.post(apiBasis, loginData, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.data.access_token) {
+                    const access_token = response.data.access_token;
+                    localStorage.setItem('access_token', access_token);
+                    localStorage.setItem('user_name', response.data.user.name); // Assuming API returns user name
+                    document.querySelector("#loginFeedback").style.color = "blue";
+                    document.querySelector("#loginFeedback").textContent = "Login succesvol!";
+                    setTimeout(() => {
+                        window.location.href = "../oefeningen.html";  
+                    }, 1500);
+                } else {
+                    document.querySelector("#loginFeedback").style.color = "red";
+                    document.querySelector("#loginFeedback").textContent = "Login mislukt, probeer opnieuw.";
+                }
+            } catch (error) {
+                console.error('Login fout:', error);
+                document.querySelector("#loginFeedback").style.color = "red";
+                document.querySelector("#loginFeedback").textContent = "Login mislukt, probeer opnieuw.";
+            }
+        };
+    </script>
+</body>
+</html>
