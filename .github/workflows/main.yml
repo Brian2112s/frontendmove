@@ -1,4 +1,4 @@
-name: Deploy Static Site via Docker
+name: 🚀 Deploy Frontend via Docker
 
 on:
   push:
@@ -26,6 +26,6 @@ jobs:
 
       - name: 📤 Push Docker image to GHCR
         run: |
-          IMAGE_NAME=ghcr.io/brian2112s/summamove_project4
+          IMAGE_NAME=ghcr.io/brian2112s/frontendmove
           docker tag static-site $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
