@@ -19,7 +19,6 @@
                         <li><a href="home.html">Home</a></li>
                         <li><a href="oefeningen.html">Oefeningen</a></li>
                         <li><a href="about.html">About</a></li>
-                        <li class="hidegebruikers"><a href="gebruikers.html">Gebruikers</a></li>
                         <li id="login-link"><a href="login_register/login.html">Login</a></li>
                         <li id="logout-link" style="display: none;"><a href="#" onclick="logout()">Uitloggen</a></li>
                         <li>
@@ -49,19 +48,6 @@
     <script>
         "use strict";
         
-        const showAdminButtons = () => {
-            const updateBtn = document.getElementById('updateBtn');
-            const deleteBtn = document.getElementById('deleteBtn');
-
-            if (updateBtn) updateBtn.style.display = 'inline';
-            if (deleteBtn) deleteBtn.style.display = 'inline';
-
-            const gebruikersnav = document.getElementsByClassName('hidegebruikers');
-            for (let i = 0; i < gebruikersnav.length; i++) {
-                gebruikersnav[i].className = 'showgebruikers';
-            }
-        };
-
         const API_URL = "https://laravel-backend-latest.onrender.com/api";
 
         const checkUserRole = async () => {

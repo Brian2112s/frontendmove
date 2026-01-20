@@ -21,7 +21,6 @@
                         <li><a href="home.html">Home</a></li>
                         <li><a href="oefeningen.html">Oefeningen</a></li>
                         <li><a href="about.html">About</a></li>
-                        <li class="hidegebruikers"><a href="gebruikers.html">Gebruikers</a></li>
                         <li><a href="login_register/login.html">Login</a></li>
                     </ul>
                 </div>
@@ -37,41 +36,5 @@
         
     </div>
 </body>
-<script>
-    const showUsersbutton = () => {
-        const gebruikersnav = document.getElementsByClassName('hidegebruikers');
-        for (let i = 0; i < gebruikersnav.length; i++) {
-            gebruikersnav[i].className = 'showgebruikers';
-        }
-    };
 
-    const checkUserRole = async () => {
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-            return;
-        }
-
-        try {
-            const response = await axios.get('http://localhost:8000/api/user', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            const userRole = response.data.role;
-
-            if (userRole === 'admin') {
-                showUsersbutton();
-                return true;
-            } else {
-                return false;
-            }
-        } catch (error) {
-            console.error('Error fetching user role:', error);
-            return false;
-        }
-    };
-
-    window.onload = checkUserRole;
-</script>
 </html>
